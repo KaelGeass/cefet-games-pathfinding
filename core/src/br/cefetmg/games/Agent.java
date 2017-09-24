@@ -108,12 +108,20 @@ public class Agent {
 
             @Override
             public float estimate(TileNode n, TileNode n1) {
-                throw new UnsupportedOperationException("Deveria ter retornado "
-                        + "um valor para a heurística no arquivo "
-                        + "Agent.java:107, mas o professor resolveu explodir "
-                        + "o programa e deixar você consertar ;)"); 
+//                CÓDIGO ORIGINAL
+//                throw new UnsupportedOperationException("Deveria ter retornado "
+//                        + "um valor para a heurística no arquivo "
+//                        + "Agent.java:107, mas o professor resolveu explodir "
+//                        + "o programa e deixar você consertar ;)"); 
+
+//              1 - CÓDIGO DE DIJKSTRA(SEM A*)
+//                return 0;
+//                2 - CÓDIGO COM HEURÌSTICA DA DISTÂNCIA EUCLIDIANA
+                float D = n.getPosition().dst(n1.getPosition());
+                return D / LevelManager.tileHeight;
             }
-        }, path);
+        },
+                path);
         pathIterator = path.iterator();
     }
 
@@ -141,32 +149,7 @@ public class Agent {
      * @return
      */
     public boolean isUnderWater() {
-        return currentNode == null || nextNode == null
-                ? false
-                : currentNode.isWater() || nextNode.isWater();
-    }
-
-    private float getPercentageOfNodeTraversalConcluded() {
-        float totalDistance2 = currentNode.getPosition()
-                .dst2(nextNode.getPosition());
-        float remainingDistance2 = position.coords.dst2(nextNode.getPosition());
-        return (totalDistance2 - remainingDistance2) / totalDistance2;
-    }
-
-    public float getUnderWaterLevel() {
-        if (currentNode != null && nextNode != null) {
-            if (currentNode.isWater() && nextNode.isWater()) {
-                // vai continuar na água
-                return 1;
-            } else if (currentNode.isWater() && !nextNode.isWater()) {
-                // está saindo da água
-                return 1 - getPercentageOfNodeTraversalConcluded();
-            } else if (nextNode.isWater() && !currentNode.isWater()) {
-                // está entrando na água
-                return getPercentageOfNodeTraversalConcluded();
-            }
-        }
-        return 0;
+        return currentNode == null ? false : currentNode.isWater();
     }
 
     /**
@@ -177,5 +160,9 @@ public class Agent {
      */
     public Metrics getPathFindingMetrics() {
         return pathFinder.metrics;
+    }
+
+    public float getUnderWaterLevel() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
